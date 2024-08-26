@@ -130,6 +130,16 @@ div.container {
   margin-top: 20px;
 }
 
+.selected-bet {
+  background-color: #2980b9;
+  opacity: 0.7;
+}
+
+.selected-bet:hover {
+  background-color: #2980b9;
+  opacity: 0.7; 
+}
+
 
 /* <----------- coin flip and animation -----------> */
 

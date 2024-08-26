@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Web3 from "web3";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const Game = () => {
   const [walletAddress, setWalletAddress] = useState(null);
@@ -31,7 +31,9 @@ const Game = () => {
       setStatus(
         "MetaMask is not installed. Please install it to use this feature."
       );
-      toast.warning("MetaMask is not installed. Please install it to use this feature."); // Show warning toaster
+      toast.warning(
+        "MetaMask is not installed. Please install it to use this feature."
+      ); // Show warning toaster
     }
   };
 
@@ -40,18 +42,16 @@ const Game = () => {
       setStatus("Please enter a valid bet amount.");
       return;
     }
-    setUserBet(bet);
-    setStatus(
-      `You bet ${betAmount} ETH on ${bet.toUpperCase()}. Click "Flip the Coin" to see the result.`
-    );
+    setUserBet(bet); // Track the selected bet
+    setStatus(`You bet ${betAmount} ETH on ${bet.toUpperCase()}. Click "Flip the Coin" to see the result.`);
   };
-
+  
   const flipCoin = () => {
     if (userBet === null) {
       setStatus(toast.warning("Please place a bet!"));
       return;
     }
-
+  
     setAnimationClass("");
     setTimeout(() => {
       const random = Math.random();
@@ -61,19 +61,21 @@ const Game = () => {
         const outcomeText = outcome.toUpperCase();
         let transactionResult;
         let transactionAmount = parseFloat(betAmount);
-
+  
         if (outcome === userBet) {
           transactionResult = "Win";
           transactionAmount *= 2;
           setOverallAmount((prev) => prev + transactionAmount);
           setStatus(`You win! You have earned ${transactionAmount} ETH.`);
+          toast.success(`You win! You have earned ${transactionAmount} ETH.`);
         } else {
           transactionResult = "Lose";
           transactionAmount *= -1;
           setOverallAmount((prev) => prev + transactionAmount);
           setStatus(`You lose! You have lost ${betAmount} ETH.`);
+          toast.error(`You lose! You have lost ${betAmount} ETH.`);
         }
-
+  
         // Record the transaction
         setTransactions((prevTransactions) => [
           ...prevTransactions,
@@ -85,9 +87,13 @@ const Game = () => {
             timestamp: new Date().toLocaleString(),
           },
         ]);
+  
+        // Reset userBet to null to clear the button highlight
+        setUserBet(null);
       }, 2900);
     }, 100);
   };
+  
 
   return (
     <div className="container">
@@ -129,13 +135,24 @@ const Game = () => {
               <div id="tails" className="tails"></div>
             </div>
             <div className="bet-buttons">
-              <button className="btn bet-btn" onClick={() => handleBet("heads")}>
+              <button
+                className={`btn bet-btn ${
+                  userBet === "heads" ? "selected-bet" : ""
+                }`}
+                onClick={() => handleBet("heads")}
+              >
                 Bet on Heads
               </button>
-              <button className="btn bet-btn" onClick={() => handleBet("tails")}>
+              <button
+                className={`btn bet-btn ${
+                  userBet === "tails" ? "selected-bet" : ""
+                }`}
+                onClick={() => handleBet("tails")}
+              >
                 Bet on Tails
               </button>
             </div>
+
             <button id="flip" className="btn flip-btn" onClick={flipCoin}>
               Flip the Coin
             </button>
