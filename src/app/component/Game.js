@@ -1,6 +1,8 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import Web3 from "web3";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Game = () => {
   const [walletAddress, setWalletAddress] = useState(null);
@@ -13,21 +15,23 @@ const Game = () => {
 
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
-      console.log("Ethereum provider found:", window.ethereum);
       try {
         const web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: "eth_requestAccounts" });
         const accounts = await web3.eth.getAccounts();
         setWalletAddress(accounts[0]);
         setStatus("Wallet connected successfully!");
+        toast.success("Wallet connected successfully!"); // Show success toaster
       } catch (error) {
         console.error("Error connecting to wallet:", error);
         setStatus("Failed to connect wallet. Please try again.");
+        toast.error("Failed to connect wallet. Please try again."); // Show error toaster
       }
     } else {
       setStatus(
         "MetaMask is not installed. Please install it to use this feature."
       );
+      toast.warning("MetaMask is not installed. Please install it to use this feature."); // Show warning toaster
     }
   };
 
@@ -44,7 +48,7 @@ const Game = () => {
 
   const flipCoin = () => {
     if (userBet === null) {
-      setStatus("Please place a bet!");
+      setStatus(toast.warning("Please place a bet!"));
       return;
     }
 
@@ -87,79 +91,76 @@ const Game = () => {
 
   return (
     <div className="container">
-    {!walletAddress ? (
-      <>
-        <button className="btn connect-wallet" onClick={connectWallet}>
-          Connect Wallet
-        </button>
-        {status && (
-          <div className="status-message">
-            <p>{status}</p>
-            {status ===
-              "MetaMask is not installed. Please install it to use this feature." && (
-              <a
-                href="https://metamask.io/download.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn install-metamask"
-              >
-                Install MetaMask
-              </a>
-            )}
-          </div>
-        )}
-      </>
-    ) : (
-      <div className="game-container">
-        <div className="game-elements">
-          <p className="wallet-address">Connected Wallet: {walletAddress}</p>
-          <input
-            type="text"
-            placeholder="Enter bet amount in ETH"
-            value={betAmount}
-            onChange={(e) => setBetAmount(e.target.value)}
-            className="bet-input"
-          />
-          <div id="coin" className={`coin ${animationClass}`}>
-            <div id="heads" className="heads"></div>
-            <div id="tails" className="tails"></div>
-          </div>
-          <div className="bet-buttons">
-            <button className="btn bet-btn" onClick={() => handleBet("heads")}>
-              Bet on Heads
-            </button>
-            <button className="btn bet-btn" onClick={() => handleBet("tails")}>
-              Bet on Tails
-            </button>
-          </div>
-          <button id="flip" className="btn flip-btn" onClick={flipCoin}>
-            Flip the Coin
+      {!walletAddress ? (
+        <>
+          <button className="btn connect-wallet" onClick={connectWallet}>
+            Connect Wallet
           </button>
-          <p className="status-message">
-            <span id="status">{status}</span>
-          </p>
-        </div>
+          {status && (
+            <div className="status-message">
+              <p>{status}</p>
+              {status ===
+                "MetaMask is not installed. Please install it to use this feature." && (
+                <a
+                  href="https://metamask.io/download.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn install-metamask"
+                >
+                  Install MetaMask
+                </a>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="game-container">
+          <div className="game-elements">
+            <p className="wallet-address">Connected Wallet: {walletAddress}</p>
+            <input
+              type="text"
+              placeholder="Enter bet amount in ETH"
+              value={betAmount}
+              onChange={(e) => setBetAmount(e.target.value)}
+              className="bet-input"
+            />
+            <div id="coin" className={`coin ${animationClass}`}>
+              <div id="heads" className="heads"></div>
+              <div id="tails" className="tails"></div>
+            </div>
+            <div className="bet-buttons">
+              <button className="btn bet-btn" onClick={() => handleBet("heads")}>
+                Bet on Heads
+              </button>
+              <button className="btn bet-btn" onClick={() => handleBet("tails")}>
+                Bet on Tails
+              </button>
+            </div>
+            <button id="flip" className="btn flip-btn" onClick={flipCoin}>
+              Flip the Coin
+            </button>
+          </div>
 
-        {/* <------------ transaction ui html -------------> */}
-  
-        <div className="transaction-history">
-          <h2 className="transaction-header">Transaction History</h2>
-          <ul className="transaction-list">
-            {transactions.map((tx, index) => (
-              <li key={index} className="transaction-item">
-                <strong>{tx.timestamp}:</strong> Bet {tx.bet} | Outcome:{" "}
-                {tx.outcome} | Result: {tx.result} | Amount: {tx.amount} ETH
-              </li>
-            ))}
-          </ul>
-          <h3 className="overall-amount">
-            Overall Amount: {overallAmount} ETH
-          </h3>
+          {/* <------------ transaction ui html -------------> */}
+
+          <div className="transaction-history">
+            <h2 className="transaction-header">Transaction History</h2>
+            <ul className="transaction-list">
+              {transactions.map((tx, index) => (
+                <li key={index} className="transaction-item">
+                  <strong>{tx.timestamp}:</strong> Bet {tx.bet} | Outcome:{" "}
+                  {tx.outcome} | Result: {tx.result} | Amount: {tx.amount} ETH
+                </li>
+              ))}
+            </ul>
+            <h3 className="overall-amount">
+              Overall Amount: {overallAmount} ETH
+            </h3>
+          </div>
         </div>
-      </div>
-    )}
-  </div>
-  
+      )}
+      <ToastContainer />
+    </div>
   );
 };
 
