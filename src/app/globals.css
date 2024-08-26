@@ -1,3 +1,5 @@
+/* <tailwind css style> */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,12 +20,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -31,3 +28,193 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/* <------------ general layout and button style ->>>>>> */
+
+
+div.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wallet-address {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.bet-input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: calc(100% - 22px);
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.connect-wallet {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.connect-wallet:hover {
+  background-color: #45a049;
+}
+
+.install-metamask {
+  background-color: #f39c12;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+.install-metamask:hover {
+  background-color: #e67e22;
+}
+
+.bet-buttons {
+  margin: 1rem 0;
+}
+
+.bet-buttons button {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bet-buttons button:hover {
+  background-color: #2980b9;
+}
+
+.flip-btn {
+  padding: 1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.flip-btn:hover {
+  background-color: #c0392b;
+}
+
+.status-message {
+  font-size: 18px;
+  color: #333;
+  margin-top: 20px;
+}
+
+.overall-amount {
+  font-size: 20px;
+  color: #27ae60;
+  margin-top: 20px;
+}
+
+
+/* <----------- coin flip and animation -----------> */
+
+#coin {
+  position: relative;
+  width: 15rem;
+  height: 15rem;
+  margin: 2rem 0;
+  transform-style: preserve-3d;
+}
+
+#coin div {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  background-size: cover;
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.heads {
+  background-image: url(/heads.png);
+}
+
+.tails {
+  background-image: url(/tails.jpg);
+  transform: rotateY(-180deg);
+}
+
+.animate-heads {
+  animation: flipHeads 3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes flipHeads {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(1800deg);
+  }
+}
+
+.animate-tails {
+  animation: flipTails 3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes flipTails {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(1620deg);
+  }
+}
+
+
+/* <------------------ transaction history style ----------> */
+
+.game-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.game-elements {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+}
+
+.transaction-history {
+  width: 35%;
+  margin-left: 2%;
+}
+
+.transaction-header,
+.transaction-list,
+.overall-amount {
+  text-align: left;
+}
+
